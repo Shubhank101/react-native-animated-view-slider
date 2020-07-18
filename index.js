@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import {
-    Text,
     View,
     Animated,
     PanResponder,
-    TouchableOpacity,
     Dimensions,
     LayoutAnimation,
     UIManager,
@@ -14,6 +12,8 @@ const PropTypes = require('prop-types');
 import styles from './style';
 
 class ViewSlider extends Component {
+
+    _panResponder = PanResponder.create()
 
     constructor(props) {
         super(props);
@@ -29,13 +29,20 @@ class ViewSlider extends Component {
         }
     }
 
+    getWidth() {
+        if (this.props.itemWidth) {
+            return this.props.itemWidth
+        }
+        return Dimensions.get('window').width
+    }
+
     _move(index) {
-        const width = Dimensions.get('window').width;
+        const width = this.getWidth()
         const to = index * -width;
         if (!this.state.scrolling) {
             return;
         }
-        Animated.timing(this.state.left, { toValue: to, friction: 10, tension: 10, velocity: 1, duration: 700 }).start();
+        Animated.timing(this.state.left, { toValue: to, friction: 10, tension: 10, velocity: 1, duration: 700, useNativeDriver: true }).start();
 
         if (this.state.timeout) {
             clearTimeout(this.state.timeout);
@@ -55,19 +62,23 @@ class ViewSlider extends Component {
         return this.state.position;
     }
 
-    componentWillReceiveProps(props) {
-        if (props.position !== undefined) {
+    componentDidUpdate(prevProps) {
+        if (this.props.position !== undefined && this.props.position != prevProps.position) {
             this.setState({ scrolling: true });
-            this._move(props.position);
+            this._move(this.props.position);
         }
     }
 
-    componentWillMount() {
-        const width = Dimensions.get('window').width;
+    componentDidMount() {
+        if (this.props.autoPlay) {
+            this.moveToNextPage()
+        }
+
+        const width = this.getWidth();
         this.state.left.setValue(-(width * this.state.position));
 
         let release = (e, gestureState) => {
-            const width = Dimensions.get('window').width;
+            const width = this.getWidth();
             const relativeDistance = gestureState.dx / width;
             const vx = gestureState.vx;
             let change = 0;
@@ -92,7 +103,7 @@ class ViewSlider extends Component {
             onPanResponderTerminate: release,
             onPanResponderMove: (e, gestureState) => {
                 const dx = gestureState.dx;
-                const width = Dimensions.get('window').width;
+                const width = this.getWidth();
                 const position = this._getPosition();
                 let left = -(position * width) + Math.round(dx);
                 if (left > 0) {
@@ -110,12 +121,8 @@ class ViewSlider extends Component {
             },
             onShouldBlockNativeResponder: () => true
         });
-    }
-
-    componentDidMount() {
-        if (this.props.autoPlay) {
-            this.moveToNextPage()
-        }
+        // trigger a refresh to render updated pan responder
+        this.forceUpdate()
     }
 
     componentWillUnmount() {
@@ -150,22 +157,17 @@ class ViewSlider extends Component {
     componentWillUpdate() {
         const CustomLayoutAnimation = {
             duration: 100,
-            //create: {
-            //    type: LayoutAnimation.Types.linear,
-            //    property: LayoutAnimation.Properties.opacity,
-            //},
             update: {
                 type: LayoutAnimation.Types.linear
             }
         };
         LayoutAnimation.configureNext(CustomLayoutAnimation);
-        //LayoutAnimation.linear();
     }
 
     render() {
         const customStyles = this.props.style ? this.props.style : {};
-        const width = Dimensions.get('window').width;
-        return (<View>
+        const width = this.props.itemWidth ? this.props.itemWidth : Dimensions.get('window').width;
+        return (<View style={{ width, overflow: 'hidden', }}>
             <Animated.View
                 style={[styles.container, customStyles, { height: this.state.height, width: width * this.props.views.length, transform: [{ translateX: this.state.left }] }]}
                 {...this._panResponder.panHandlers}>
