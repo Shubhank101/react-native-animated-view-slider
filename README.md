@@ -42,6 +42,21 @@ return (
 );
 ```
 
+### Doc
+
+| prop                  | type   | description                                                       |
+|-----------------------|--------|-------------------------------------------------------------------|
+| views                 | array  | views to show in the slider - can be images/text - any View       |
+| itemWidth             | number | pass to set size of ViewSlider otherwise uses screenWidth         |
+| autoPlay              | bool   | should the slider auto play the slides - defaults to false        |
+| autoPlayDuration      | number | time between each slide autoplay - defaults to 4000ms             |
+| initialPosition       | number | initial slide to show                                             |
+| snapAnimationDuration | number | Duration in which slider snaps to next element - default to 400ms |
+
+## Background
+
+Most of the components out there uses Scrollview to implement the slider which does not allow custom duration to be passed while snapping to next element.
+
 ##    Thanks
 
 Inspired by [react-native-elastic-image-slider](https://github.com/xiewang/react-native-elastic-image-slider)
