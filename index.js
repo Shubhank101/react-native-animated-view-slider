@@ -42,7 +42,7 @@ class ViewSlider extends Component {
         if (!this.state.scrolling) {
             return;
         }
-        Animated.timing(this.state.left, { toValue: to, friction: 10, tension: 10, velocity: 1, duration: 700, useNativeDriver: true }).start();
+        Animated.timing(this.state.left, { toValue: to, friction: 10, tension: 10, velocity: 1, duration: this.props.snapAnimationDuration, useNativeDriver: true }).start();
 
         if (this.state.timeout) {
             clearTimeout(this.state.timeout);
