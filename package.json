@@ -1,4 +1,13 @@
 {
     "name": "react-native-animated-view-slider",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "description": "A library that allow user to slide through views",
+    "license": "MIT",
+    "repository": "Shubhank101/react-native-animated-view-slider",
+    "main": "index.js",
+    "keywords": [
+      "animated",
+      "slider",
+      "scroll",
+    ]
 }
