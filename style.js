@@ -1,19 +1,12 @@
 
-import React from 'react-native';
+import { Stylesheet } from 'react-native';
 
-var {
-    StyleSheet,
-    Dimensions,
-    } = React;
-
-const {height, width} = Dimensions.get('window');
-
-const styles = StyleSheet.create({
+const styles = Stylesheet.create({
     container: {
         flexDirection: 'row',
         overflow: 'hidden',
-        backgroundColor:'white',
-    },  
+        backgroundColor: 'white',
+    },
 });
 
 export default styles;

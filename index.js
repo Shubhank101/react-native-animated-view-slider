@@ -90,8 +90,8 @@ class ViewSlider extends Component {
             const position = this._getPosition();
             if (position === 0 && change === -1) {
                 change = 0;
-            } else if (position + change >= this.props.views.length) {
-                change = (this.props.views.length) - (position + change);
+            } else if (position + change >= this.props.sliderViews.length) {
+                change = (this.props.sliderViews.length) - (position + change);
             }
             this._move(position + change);
             this.moveToNextPage() // auto play setup
@@ -108,9 +108,9 @@ class ViewSlider extends Component {
                 let left = -(position * width) + Math.round(dx);
                 if (left > 0) {
                     left = Math.sin(left / width) * (width / 2);
-                } else if (left < -(width * (this.props.views.length - 1))) {
-                    const diff = left + (width * (this.props.views.length - 1));
-                    left = Math.sin(diff / width) * (width / 2) - (width * (this.props.views.length - 1));
+                } else if (left < -(width * (this.props.sliderViews.length - 1))) {
+                    const diff = left + (width * (this.props.sliderViews.length - 1));
+                    left = Math.sin(diff / width) * (width / 2) - (width * (this.props.sliderViews.length - 1));
                 }
                 this.state.left.setValue(left);
                 if (!this.state.scrolling) {
@@ -140,14 +140,14 @@ class ViewSlider extends Component {
 
     // recursive - used in auto play
     moveToNextPage() {
-        if (!(this.props.autoPlay && this.state.position < this.props.views.length - 1)) {
+        if (!(this.props.autoPlay && this.state.position < this.props.sliderViews.length - 1)) {
             // reached end or not autoplaying
             return
         }
         const autoPlayTimeOut = setTimeout(() => {
             this.setState({ scrolling: true });
             this._move(this.state.position + 1);
-            if ((this.props.autoPlay && this.state.position < this.props.views.length - 1)) {
+            if ((this.props.autoPlay && this.state.position < this.props.sliderViews.length - 1)) {
                 this.moveToNextPage()
             }
         }, this.props.autoPlayDuration)
@@ -169,9 +169,9 @@ class ViewSlider extends Component {
         const width = this.props.itemWidth ? this.props.itemWidth : Dimensions.get('window').width;
         return (<View style={{ width, overflow: 'hidden', }}>
             <Animated.View
-                style={[styles.container, customStyles, { height: this.state.height, width: width * this.props.views.length, transform: [{ translateX: this.state.left }] }]}
+                style={[styles.container, customStyles, { height: this.state.height, width: width * this.props.sliderViews.length, transform: [{ translateX: this.state.left }] }]}
                 {...this._panResponder.panHandlers}>
-                {this.props.views.map((view, index) => {
+                {this.props.sliderViews.map((view, index) => {
                     let component = view
                     return component;
                 })}
@@ -186,7 +186,7 @@ ViewSlider.propTypes = {
     autoPlay: PropTypes.bool,
     autoPlayDuration: PropTypes.number,
     snapAnimationDuration: PropTypes.number,
-    views: PropTypes.array.isRequired
+    sliderViews: PropTypes.array.isRequired
 }
 
 ViewSlider.defaultProps = {
@@ -195,7 +195,7 @@ ViewSlider.defaultProps = {
     autoPlayDuration: 4000,
     initialPosition: 0,
     snapAnimationDuration: 400,
-    views: []
+    sliderViews: []
 }
 
 export default ViewSlider;
