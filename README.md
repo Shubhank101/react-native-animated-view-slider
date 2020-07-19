@@ -3,7 +3,7 @@ A library that allow user to slide through views
 
 ![npm](https://img.shields.io/npm/v/react-native-animated-view-slider)
 
-![example](https://imgur.com/pzk9xFZ)
+![example](https://i.imgur.com/pzk9xFZ.gif)
 
 ## Install
 
